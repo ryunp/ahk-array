@@ -26,7 +26,6 @@ Now, since AHK is also prototypical in nature, these could have been added to a 
 * shift
 * slice
 * some
-* sort
 * splice
 * toString
 * unshift
@@ -35,7 +34,9 @@ Now, since AHK is also prototypical in nature, these could have been added to a 
 ### Tests
 Nothing is truely complete without testing, so each array_<method> has a test case in `tests/`
 
-Here is array_slice's:
+Primitive little test_suite system, output is simply put in an edit control.
+
+Sample of array_slice results:
 
     array_slice(array, start:=0, end:=0)
     [PASS] No args
@@ -43,3 +44,6 @@ Here is array_slice's:
     [PASS] Positive start & end
     [PASS] Negative start
     [PASS] Negative start & end
+
+### Sort?
+Considered implementing a `array_sort` quicksort; but currently no immediate need.

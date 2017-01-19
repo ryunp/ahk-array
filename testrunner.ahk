@@ -3,12 +3,12 @@
 
 
 ; Include test classes
-#Include, ..\test_suite\assert.ahk
-#Include, ..\test_suite\tester.ahk
+#Include, test_suite\assert.ahk
+#Include, test_suite\tester.ahk
 
 
 ; Create test object for tests to use
-tester := new TestRunner("-JavaScript Array object methods to AutoHotkey conversion-")
+tester := new TestRunner("-Conversion of JavaScript's Array methods to AutoHotkey-")
 
 
 ; Include test cases
