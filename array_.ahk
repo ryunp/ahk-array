@@ -1,13 +1,13 @@
 ; https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat
 array_concat(arrays*) {
 
-	new_array := []
+	results := []
 
 	for _, array in arrays
 		for _, element in array
-			new_array.push(element)
+			results.push(element)
 
-	return new_array
+	return results
 }
 
 
@@ -29,11 +29,11 @@ array_fill(array, value, start:=0, end:=0) {
 
 	; START: Adjust 1 based index, check signage, set defaults
 	if (start > 0)
-		beg := start - 1    ; Include starting index going forward
+		begin := start - 1    ; Include starting index going forward
 	else if (start < 0)
-		beg := len + start  ; Count backwards from end
+		begin := len + start  ; Count backwards from end
 	else
-		beg := start
+		begin := start
 
 
 	; END: Check signage and set defaults
@@ -45,21 +45,21 @@ array_fill(array, value, start:=0, end:=0) {
 		last := len
 
 
-	loop, % (last - beg)
-		array[beg + A_Index] := value
+	loop, % (last - begin)
+		array[begin + A_Index] := value
 }
 
 
 ; https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
 array_filter(array, callback) {
 	
-	new_array := []
+	results := []
 
 	for index, element in array
 		if (callback.Call(element, index, array))
-			new_array.push(element)
+			results.push(element)
 
-	return new_array
+	return results
 }
 
 
@@ -126,12 +126,12 @@ array_indexOf(array, searchElement, fromIndex:=0) {
 ; https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/join
 array_join(array, delim) {
 	
-	str := ""
+	result := ""
 	
 	for index, element in array
-		str .= element (index < array.Length() ? delim : "")
+		result .= element (index < array.Length() ? delim : "")
 
-	return str
+	return result
 }
 
 ; https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/lastIndexOf
@@ -163,24 +163,23 @@ array_lastIndexOf(array, searchElement, fromIndex:=0) {
 ; https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
 array_map(array, callback) {
 
-	new_array := []
+	results := []
 
 	for index, element in array
-		new_array.push(callback.Call(element, index, array))
+		results.push(callback.Call(element, index, array))
 
-	return new_array
+	return results
 }
 
 
 ; https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce
 array_reduce(array, callback, initialValue:="IAMNULL") {
 
-	indexOffset := 0
+	idxOffset := 0
 	arrLen := array.Length()
 
 	; No initialValue passed
 	if (initialValue == "IAMNULL") {
-
 
 		if (arrLen < 1) {
 			throw "Empty array with no intial value, derp"
@@ -189,7 +188,7 @@ array_reduce(array, callback, initialValue:="IAMNULL") {
 			return array[1]
 		}
 		else {
-			indexOffset := 1
+			idxOffset := 1
 			initialValue := array[1]
 		}
 
@@ -204,9 +203,9 @@ array_reduce(array, callback, initialValue:="IAMNULL") {
 	; if no initialValue is passed, reduce passed array starting at second
 	; index. Otherwise use initialValue as reduction target and start at array's
 	; first index.
-	Loop, % (arrLen - indexOffset)
+	Loop, % (arrLen - idxOffset)
 	{
-		adjIndex := A_Index + indexOffset
+		adjIndex := A_Index + idxOffset
 		initialValue := callback.Call(initialValue, array[adjIndex], adjIndex, array)
 	}
 	
@@ -222,21 +221,19 @@ array_reduceRight(array, callback, initialValue:="IAMNULL") {
 	; No initialValue passed
 	if (initialValue == "IAMNULL") {
 
-
 		if (arrLen < 1)
 			throw "Empty array with no intial value, derp"
 		else if (arrLen == 1)
 			return array[1]
 
+		; Start at end
 		initialValue := array[arrLen]
 
-		; Loop n-1 times (skip last element)
-		Loop, % (arrLen - 1)
-		{
-			; 1 based index notation skips last element
-			adjIndex := arrLen - A_Index
-			initialValue := callback.Call(initialValue, array[adjIndex], adjIndex, array)
-		}
+		; Loop n-1 times (start at n-1 element)
+		iterations := arrLen - 1 
+		
+		; Start at n-1 element (Keep 1 based index notation)
+		idxOffset := 0
 
 	} else {
 	; Have initialValue
@@ -244,14 +241,19 @@ array_reduceRight(array, callback, initialValue:="IAMNULL") {
 		if (arrLen == 0)
 			return initialValue
 
-		Loop, % (arrLen)
-		{
-			; Equalize 1 based index notation to start at last element
-			adjIndex := arrLen - (A_Index - 1)
-			initialValue := callback.Call(initialValue, array[adjIndex], adjIndex, array)
-		}
-	}	
-	
+		; Loop n times (start at n element)
+		iterations := arrLen
+
+		; Start at n element (Adjust to 0 based index notation)
+		idxOffset := 1
+	}
+
+	Loop, % iterations
+	{
+		adjIndex := arrLen - (A_Index - idxOffset)
+		initialValue := callback.Call(initialValue, array[adjIndex], adjIndex, array)
+	}
+
 	return initialValue
 }
 
@@ -287,7 +289,7 @@ array_slice(array, start:=0, end:=0) {
 
 	len := array.Length()
 
-	; start: Adjust 1 based index, check signage, set defaults
+	; START: Adjust 1 based index, check signage, set defaults
 	if (start > 0)
 		begin := start - 1    ; Include starting index going forward
 	else if (start < 0)
@@ -306,12 +308,12 @@ array_slice(array, start:=0, end:=0) {
 		last := len
 
 
-	new_array := []
+	results := []
 
-	loop, % len - begin
-		new_array.push(array[begin + A_Index])
+	loop, % last - begin
+		results.push(array[begin + A_Index])
 
-	return new_array
+	return results
 }
 
 
@@ -330,6 +332,7 @@ array_some(array, callback) {
 array_sort(array, callback) {
 
 	;Quicksort
+	throw "Not implemented"
 
 }
 
