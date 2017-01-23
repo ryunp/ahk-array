@@ -14,12 +14,13 @@ class TestRunner {
 		return tests
 	}
 
-	getResults() {
+	getAllTestResults() {
 
-		results := [this.title, ""]
+		FormatTime, CurrentDateTime,, MM/dd/yy - HH:mm:ss
+		results := [CurrentDateTime, this.title, ""]
 
 		for i, tests in this.groups
-			results.push(tests.getResults())
+			results.push(tests.getTestResults())
 
 		return array_join(results, "`n")
 	}
@@ -39,7 +40,7 @@ class TestGroup {
 		this.tests.push(new Test(desc, result))
 	}
 
-	getResults() {
+	getTestResults() {
 
 		results := [this.title]
 
@@ -62,28 +63,3 @@ class Test {
 		return "[" (this.result ? "PASS" : "----") "] " this.desc
 	}
 }
-
-/* Depricated
-class Tester {
-	
-	tests := []
-
-	__New(title) {
-
-		this.title := title ? title : "Test Suite"
-		this.tests.push(this.title "`n")
-	}
-
-	add(desc, result) {
-
-		msgbox adding
-		string := "[" (result ? "PASS" : "----") "] " desc
-		this.tests.push(string)
-	}
-
-	results() {
-
-		return array_join(this.tests, "`n")
-	}
-}
-*/
