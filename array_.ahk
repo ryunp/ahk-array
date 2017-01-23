@@ -378,12 +378,11 @@ array_splice(ByRef array, start, deleteCount:=-1, args*) {
 ; https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toString
 array_toString(array) {
 
-	str := "["
-
+	str := ""
 	for i,v in array
-		str .= v (i < array.Length() ? ", " : "")
+		str .= v (i < array.Length() ? "," : "")
 	
-	return str "]"
+	return "[" str "]"
 }
 
 

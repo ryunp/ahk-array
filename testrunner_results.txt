@@ -1,4 +1,4 @@
-01/22/17 - 19:23:53
+01/22/17 - 20:28:20
 -Conversion of JavaScript's Array methods to AutoHotkey-
 
 array_concat(array[, array, ...])
@@ -97,6 +97,9 @@ array_splice(ByRef array, start, deleteCount:=-1, args*)
 [PASS] Starting position with delete and args: spliced
 [PASS] Starting position no delete and args: array
 [PASS] Starting position no delete and args: spliced
+
+array_toString(array)
+[PASS] Sequential int array to string
 
 array_unshift(array, args*)
 [PASS] Add two elements to start of array

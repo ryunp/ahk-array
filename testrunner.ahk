@@ -17,7 +17,7 @@ tester := new TestRunner("-Conversion of JavaScript's Array methods to AutoHotke
 #Include, array_concat.test.ahk
 #Include, array_every.test.ahk
 #Include, array_fill.test.ahk
-#Include, array_filter.test.ahk ; <
+#Include, array_filter.test.ahk
 #Include, array_find.test.ahk
 #Include, array_findIndex.test.ahk
 #Include, array_forEach.test.ahk
@@ -31,6 +31,7 @@ tester := new TestRunner("-Conversion of JavaScript's Array methods to AutoHotke
 #Include, array_slice.test.ahk
 #Include, array_some.test.ahk
 #Include, array_splice.test.ahk
+#Include, array_toString.test.ahk
 #Include, array_unshift.test.ahk
 
 ; Show results
