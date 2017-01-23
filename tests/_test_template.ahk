@@ -1,8 +1,13 @@
-t := new Tester("func(arg1, arg2)")
+group := tester.newGroup("func(arg1, arg2)")
 
-; Setup structures here
+; Setup data structures here
+array := [1,2]
 
-desc := ""
-t.add(desc, Assert.true(1))
+; Setup tests
+group.newTest("test 1", Assert.true(1))
 
-msgbox % t.results()
+group.newTest("test 2", Assert.false(0))
+
+group.newTest("test 3", Assert.equals(1, 1))
+
+group.newTest("test 4", Assert.arrayEquals([1,2], array)

@@ -1,0 +1,102 @@
+01/22/17 - 16:54:15
+-Conversion of JavaScript's Array methods to AutoHotkey-
+
+array_concat(array[, array, ...])
+[PASS] Combine empty array and non empty array
+[PASS] Combine two non empty arrays
+[PASS] Combine three non empty arrays
+
+array_every(array, callback)
+[PASS] Function object
+[PASS] Bound function object
+[PASS] Bound function object
+
+array_fill(array, value, start:=0, end:=0)
+[PASS] No args
+[PASS] Positive start
+[PASS] Positive start & end
+[PASS] Negative start
+[PASS] Negative start & end
+
+array_filter(array, callback)
+[PASS] Collect even numbers
+[PASS] Collect odd numbers
+
+array_find(array, callback)
+[PASS] Successful item lookup
+[PASS] Unsuccessful item lookup
+
+array_findIndex(array, callback)
+[PASS] Successful item lookup
+[PASS] Unsuccessful item lookup
+
+array_forEach(array, callback)
+[PASS] Act on global variable for result
+[PASS] Change property of each object
+
+array_includes(array, searchElement, fromIndex:=0)
+[PASS] No args
+[PASS] Positive fromIndex
+[PASS] Negative fromIndex
+[PASS] Negative fromIndex
+
+array_join(array, delim)
+[PASS] Join elements with newlines
+[PASS] Join elements with commas
+
+array_lastIndexOf(array, searchElement, fromIndex:=0)
+[PASS] Get matching last index
+[PASS] Get matching last index with bad starting index
+[PASS] Get matching last index with positive starting index 
+[PASS] Get matching last index with negative starting index
+
+array_map(array, callback)
+[PASS] Double integer values
+[PASS] Strip object down to single property
+
+array_reduce(array, callback, initialValue:='IAMNULL')
+[PASS] Add all values of array
+[PASS] Find maximum value of array
+[PASS] Add all values of array to initial value
+[PASS] Sum a property of all objects
+[PASS] Copy a string property of all objects into an array
+
+array_reduceRight(array, callback, initialValue:='IAMNULL')
+[PASS] Add all values of array
+[PASS] Find maximum value of array
+[PASS] Add all values of array to initial value
+[PASS] Sum a property of all objects
+[PASS] Copy a string property of all objects into an array
+
+array_reverse(array)
+[PASS] Reverse even sized int array
+[PASS] Reverse odd sized int array
+
+array_slice(array, start:=0, end:=0)
+[PASS] No args
+[PASS] Positive start
+[PASS] Positive start & end
+[PASS] Negative start
+[PASS] Negative start & end
+[PASS] Positive start & negative end
+[PASS] Negative start & positive end
+
+array_some(array, callback)
+[PASS] Detect one even number
+[PASS] Detect one odd number
+[PASS] Fails to find large enough number
+
+array_splice(ByRef array, start, deleteCount:=-1, args*)
+[PASS] Starting position only: array
+[PASS] Starting position only: spliced
+[PASS] Starting position with delete: array
+[PASS] Starting position with delete: spliced
+[PASS] Starting position no delete: array
+[PASS] Starting position no delete: spliced
+[PASS] Starting position with delete and args: array
+[PASS] Starting position with delete and args: spliced
+[PASS] Starting position no delete and args: array
+[PASS] Starting position no delete and args: spliced
+
+array_unshift(array, args*)
+[PASS] Add two elements to start of array
