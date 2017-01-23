@@ -2,9 +2,30 @@
 ## Conversion of JavaScript's Array methods to AutoHotkey
 
 
-AHK supports functors but no built in functions for functional style operations. Funky. JavaScript's Array object has some nice methods; so I stole them.
+AHK supports [objects](https://autohotkey.com/docs/objects/Object.htm), [arrays](https://autohotkey.com/docs/Objects.htm#Table_of_Contents), and [function objects](https://autohotkey.com/docs/objects/Functor.htm). But it lacks built in methods for functional operation on arrays, like `Array.map()`. JavaScript's Array object has some handy methods; so I ported them over.
 
-Since AHK is also prototypical in nature, these could have been added to a base object. But that didn't happen for simplicities sake, they are all prefixed with `array_`.
+Since AHK is also prototypical in nature, these could have been added to a base object. For simplicity's sake these are global functions. All methods are prefixed with `array_`.
+
+### Usage
+
+Just include the `array_.ahk` file and pass functors as arguments when needed. For instance, to double all values in an array:
+
+    array := [1,2,3,4]
+    result := array_map(array, func("double"))
+    double(item) {
+    	return item * 2
+    }
+    msgbox % array_toString(result) ;outputs "[2,4,6,8]"
+
+or getting fancy with a partial:
+
+    array := [12,3,44,9]
+    result := array_map(array, func("multiply").bind(2))
+    multiply(a, b) {
+    	return a * b
+    }
+    msgbox % array_toString(result) ;outputs "[24,6,88,18]"
+    
 
 ### Stolen Methods
 
@@ -34,7 +55,7 @@ Since AHK is also prototypical in nature, these could have been added to a base 
 Considered implementing a `array_sort` quicksort; but currently no immediate need.
 
 ### Tests
-Nothing is truely complete without testing, so each array_<method> has a test case file in the `tests/` directory.
+Nothing is truely complete without testing, so each `array_<method>` has a test case file in the `tests/` directory.
 
 Built a few primitive [test classes](test_suite/tester.ahk) to collect test cases. Management of this test class is located in [testrunner.ahk](testrunner.ahk). Results are output to an edit control in a new window.
 
