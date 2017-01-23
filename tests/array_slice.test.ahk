@@ -17,3 +17,9 @@ group.newTest("Negative start"
 
 group.newTest("Negative start & end"
 	, Assert.arrayEqual([4], array_slice(array, -2, -1)))
+
+group.newTest("Positive start & negative end"
+	, Assert.arrayEqual([2,3], array_slice(array, 2, -2)))
+
+group.newTest("Negative start & positive end"
+	, Assert.arrayEqual([2], array_slice(array, -4, 3)))

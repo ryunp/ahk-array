@@ -13,6 +13,7 @@ tester := new TestRunner("-Conversion of JavaScript's Array methods to AutoHotke
 
 ; Include test cases
 #Include, tests\
+#Include, _common.ahk
 #Include, array_concat.test.ahk
 #Include, array_every.test.ahk
 #Include, array_fill.test.ahk
@@ -33,7 +34,7 @@ tester := new TestRunner("-Conversion of JavaScript's Array methods to AutoHotke
 #Include, array_unshift.test.ahk
 
 ; Show results
-gui, add, edit, r30, % tester.getResults()
+gui, add, edit, r30, % tester.getAllTestResults()
 gui, show
 
 return

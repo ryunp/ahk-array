@@ -1,43 +1,23 @@
 group := tester.newGroup("array_reduce(array, callback, initialValue:='IAMNULL')")
 
-names := ["bob", "tom", "morty", "rick"]
+names := ["tom", "jerry", "morty", "rick"]
 array := [1,2,3,6,4,5]
-array2 := [{"name": names[1], "age": 22}
-	, {"name": names[2], "age": 51}
-	, {"name": names[3], "age": 15}
-	, {"name": names[4], "age": 55}]
-
+array2 := [new Person(names[1], 22)
+	, new Person(names[2], 51)
+	, new Person(names[3], 15)
+	, new Person(names[4], 55)]
 
 group.newTest("Add all values of array"
-	, Assert.equal(21, array_reduce(array, func("addition_f"))))
+	, Assert.equal(21, array_reduce(array, func("addition"))))
 
 group.newTest("Find maximum value of array"
-	, Assert.equal(6, array_reduce(array, func("maximum_f"))))
+	, Assert.equal(6, array_reduce(array, func("maximum"))))
 
 group.newTest("Add all values of array to initial value"
-	, Assert.equal(41, array_reduce(array, func("addition_f"), 20)))
+	, Assert.equal(41, array_reduce(array, func("addition"), 20)))
 
-group.newTest("sum a property of all objects"
-	, Assert.equal(143, array_reduce(array2, func("addObjAge_f"), 0)))
+group.newTest("Sum a property of all objects"
+	, Assert.equal(143, array_reduce(array2, func("objProp_addition").bind("age"), 0)))
 
 group.newTest("Copy a string property of all objects into an array"
-	, Assert.arrayEqual(names, array_reduce(array2, func("pushObjName_f"), [])))
-
-
-
-addition_f(a, b) {
-	return a + b
-}
-
-maximum_f(max, cur) {
-	return ((max > cur) ? max : cur)
-}
-
-addObjAge_f(total, obj) {
-	return total + obj.age
-}
-
-pushObjName_f(names, obj) {
-	names.push(obj.name)
-	return names
-}
+	, Assert.arrayEqual(names, array_reduce(array2, func("objProp_arrayPush").bind("name"), [])))
