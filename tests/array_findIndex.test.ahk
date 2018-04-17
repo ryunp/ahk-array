@@ -5,13 +5,7 @@ array2 := [10,22,123,334,45,"d"]
 
 
 group.newTest("Successful item lookup"
-	, Assert.equal(3, array_findIndex(array, func("findIndexCallback"))))
+	, Assert.equal(3, array_findIndex(array, objBindMethod(Assert, "equal", "ca"))))
 
 group.newTest("Unsuccessful item lookup"
-	, Assert.equal(0, array_findIndex(array2, func("findIndexCallback"))))
-
-
-
-findIndexCallback(element, index, array) {
-	return (element = "ca")
-}
+	, Assert.equal(0, array_findIndex(array2, objBindMethod(Assert, "equal", "ca"))))

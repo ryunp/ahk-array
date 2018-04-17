@@ -1,4 +1,4 @@
-group := tester.newGroup("array_every(array, callback)")
+group := tester.newGroup("every(callback)")
 
 array_even := [2,4,6]
 array_odd := [1,2,4,6]
@@ -8,11 +8,11 @@ isEvenCond_fn := objBindMethod(compare_obj, "isEvenConditional")
 
 
 group.newTest("Function object"
-	, Assert.true(array_every(array_even, func("isEven"))))
+	, Assert.true(array_even.every(func("isEven"))))
 
 group.newTest("Bound function object"
-	, Assert.false(array_every(array_odd, isEvenCond_fn)))
+	, Assert.false(array_odd.every(isEvenCond_fn)))
 
 compare_obj.setAllTrue(true)
 group.newTest("Bound function object #2"
-	, Assert.true(array_every(array_odd, isEvenCond_fn)))
+	, Assert.true(array_odd.every(isEvenCond_fn)))

@@ -22,7 +22,7 @@ array_every(array, callback) {
 }
 
 
-; https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/fill
+; https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
 array_fill(array, value, start:=0, end:=0) {
 
 	len := array.Length()
@@ -47,6 +47,8 @@ array_fill(array, value, start:=0, end:=0) {
 
 	loop, % (last - begin)
 		array[begin + A_Index] := value
+
+	return array
 }
 
 
@@ -63,13 +65,14 @@ array_filter(array, callback) {
 }
 
 
-; https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/fill
+; https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
 ; Modified to return 0 instead of 'undefined'
 array_find(array, callback) {
 	
-	for index, element in array
-		if (callback.Call(element, index, array) = true)
+	for index, element in array {
+		if (callback.Call(element, index, array))
 			return element
+	}
 
 	return 0
 }
@@ -92,6 +95,8 @@ array_forEach(array, callback) {
 
 	for index, element in array
 		callback.Call(element, index, array)
+
+	return 0
 }
 
 
@@ -162,7 +167,7 @@ array_lastIndexOf(array, searchElement, fromIndex:=0) {
 
 ; https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
 array_map(array, callback) {
-
+    global
 	results := []
 
 	for index, element in array
@@ -173,37 +178,51 @@ array_map(array, callback) {
 
 
 ; https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce
-array_reduce(array, callback, initialValue:="IAMNULL") {
+; -->[A,B,C,D,E,F]
+array_reduce(array, callback, initialValue:="__NULL__") {
 
-	idxOffset := 0
 	arrLen := array.Length()
 
-	; No initialValue passed
-	if (initialValue == "IAMNULL") {
+	; initialValue not defined
+	if (initialValue == "__NULL__") {
 
 		if (arrLen < 1) {
-			throw "Empty array with no intial value, derp"
+			; Empty array with no intial value
+			return
 		}
 		else if (arrLen == 1) {
+			; Single item array with no initial value
 			return array[1]
 		}
-		else {
-			idxOffset := 1
-			initialValue := array[1]
-		}
+
+		; Starting value is last element
+		initialValue := array[1]
+
+		; Loop n-1 times (start at 2nd element)
+		iterations := arrLen - 1 
+
+		; Set index A_Index+1 each iteration
+		idxOffset := 1
 
 	} else {
-	; Have initialValue
+	; initialValue defined
 
 		if (arrLen == 0) {
+			; Empty array with initial value
 			return initialValue
 		}
+
+		; Loop n times (starting at 1st element)
+		iterations := arrLen
+
+		; Set index A_Index each iteration
+		idxOffset := 0
 	}
 
-	; if no initialValue is passed, reduce passed array starting at second
-	; index. Otherwise use initialValue as reduction target and start at array's
-	; first index.
-	Loop, % (arrLen - idxOffset)
+	; if no initialValue is passed, use first index as starting value and reduce
+	; array starting at index n+1. Otherwise, use initialValue as staring value
+	; and start at arrays first index.
+	Loop, % iterations
 	{
 		adjIndex := A_Index + idxOffset
 		initialValue := callback.Call(initialValue, array[adjIndex], adjIndex, array)
@@ -214,40 +233,49 @@ array_reduce(array, callback, initialValue:="IAMNULL") {
 
 
 ; https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduceRight
-array_reduceRight(array, callback, initialValue:="IAMNULL") {
+; [A,B,C,D,E,F]<--
+array_reduceRight(array, callback, initialValue:="__NULL__") {
 
 	arrLen := array.Length()
 
-	; No initialValue passed
-	if (initialValue == "IAMNULL") {
+	; initialValue not defined
+	if (initialValue == "__NULL__") {
 
-		if (arrLen < 1)
-			throw "Empty array with no intial value, derp"
-		else if (arrLen == 1)
+		if (arrLen < 1) {
+			; Empty array with no intial value
+			return
+		}
+		else if (arrLen == 1) {
+			; Single item array with no initial value
 			return array[1]
+		}
 
-		; Start at end
+		; Starting value is last element
 		initialValue := array[arrLen]
 
-		; Loop n-1 times (start at n-1 element)
+		; Loop n-1 times (starting at n-1 element)
 		iterations := arrLen - 1 
 		
-		; Start at n-1 element (Keep 1 based index notation)
+		; Set index A_Index-1 each iteration
 		idxOffset := 0
 
 	} else {
-	; Have initialValue
+	; initialValue defined
 
 		if (arrLen == 0)
+			; Empty array with initial value
 			return initialValue
 
 		; Loop n times (start at n element)
 		iterations := arrLen
 
-		; Start at n element (Adjust to 0 based index notation)
+		; Set index A_Index each iteration
 		idxOffset := 1
 	}
-	
+
+	; If no initialValue is passed, use last index as starting value and reduce
+	; array starting at index n-1. Otherwise, use initialValue as starting value
+	; and start at arrays last index.
 	Loop, % iterations
 	{
 		adjIndex := arrLen - (A_Index - idxOffset)
@@ -329,11 +357,12 @@ array_some(array, callback) {
 
 
 ; https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
-array_sort(array, callback) {
+array_sort(array, compare_fn:=0) {
 
-	;Quicksort
-	throw "Not implemented"
+    ; Quicksort
+	Array_QuickSort.Call(array, compare_fn)
 
+    return array
 }
 
 
@@ -395,3 +424,53 @@ array_unshift(array, args*) {
 
 	return array.Length()
 }
+
+/*
+Class _Array_QuickSort {
+    __New(array, compare_fn:=0) {
+        this.array := array
+        this.compare_fn := compare_fn
+        if not (compare_fn) {
+            this.compare_fn := objBindMethod(this, "_basic_compare")
+        }
+    }
+
+    _basic_compare(a, b) {
+        return a > b ? 1 : a < b ? -1 : 0
+    }
+
+    sort(left, right) {
+        if (this.array.Length() > 1) {
+            centerIdx := this.partition(left, right)
+            if (left < centerIdx - 1) {
+                this.sort(left, centerIdx - 1)
+            }
+            if (centerIdx < right) {
+                this.sort(centerIdx, right)
+            }
+        }
+    }
+
+    partition(left, right) {
+        pivot := this.array[floor(left + (right - left) / 2)]
+        i := left
+        j := right
+
+        while (i <= j) {
+            while (this.compare_fn.Call(this.array[i], pivot) = -1) { ;this.array[i] < pivot
+                i++
+            }
+            while (this.compare_fn.Call(this.array[j], pivot) = 1) { ;this.array[j] > pivot
+                j--
+            }
+            if (i <= j) {
+                this.array.swap(i, j)
+                i++
+                j--
+            }
+        }
+
+        return i
+    }
+}
+*/
