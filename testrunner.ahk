@@ -40,7 +40,6 @@ tester := new TestRunner("-explicit array_<fn> functions from 'array_.ahk'-")
 #Include, array_toString.test.ahk
 #Include, array_unshift.test.ahk
 
-<<<<<<< HEAD
 ; Setup 'array_' results
 Gui, Tab, array_
 gui, add, edit, r30 w375, % tester.getAllTestResults()
@@ -85,10 +84,6 @@ gui, add, edit, r30 w375, % tester.getAllTestResults()
 
 
 ; Show Gui
-=======
-; Show results
-gui, add, edit, r30, % tester.getAllTestResults()
->>>>>>> origin/master
 gui, show
 
 return

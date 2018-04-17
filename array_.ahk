@@ -47,11 +47,8 @@ array_fill(array, value, start:=0, end:=0) {
 
 	loop, % (last - begin)
 		array[begin + A_Index] := value
-<<<<<<< HEAD
 
 	return array
-=======
->>>>>>> origin/master
 }
 
 
@@ -170,11 +167,7 @@ array_lastIndexOf(array, searchElement, fromIndex:=0) {
 
 ; https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
 array_map(array, callback) {
-<<<<<<< HEAD
-    global
-=======
 
->>>>>>> origin/master
 	results := []
 
 	for index, element in array
@@ -188,18 +181,10 @@ array_map(array, callback) {
 ; -->[A,B,C,D,E,F]
 array_reduce(array, callback, initialValue:="__NULL__") {
 
-<<<<<<< HEAD
 	arrLen := array.Length()
 
 	; initialValue not defined
 	if (initialValue == "__NULL__") {
-=======
-	idxOffset := 0
-	arrLen := array.Length()
-
-	; No initialValue passed
-	if (initialValue == "IAMNULL") {
->>>>>>> origin/master
 
 		if (arrLen < 1) {
 			; Empty array with no intial value
@@ -209,7 +194,6 @@ array_reduce(array, callback, initialValue:="__NULL__") {
 			; Single item array with no initial value
 			return array[1]
 		}
-<<<<<<< HEAD
 
 		; Starting value is last element
 		initialValue := array[1]
@@ -219,12 +203,6 @@ array_reduce(array, callback, initialValue:="__NULL__") {
 
 		; Set index A_Index+1 each iteration
 		idxOffset := 1
-=======
-		else {
-			idxOffset := 1
-			initialValue := array[1]
-		}
->>>>>>> origin/master
 
 	} else {
 	; initialValue defined
@@ -241,17 +219,10 @@ array_reduce(array, callback, initialValue:="__NULL__") {
 		idxOffset := 0
 	}
 
-<<<<<<< HEAD
 	; if no initialValue is passed, use first index as starting value and reduce
 	; array starting at index n+1. Otherwise, use initialValue as staring value
 	; and start at arrays first index.
 	Loop, % iterations
-=======
-	; if no initialValue is passed, reduce passed array starting at second
-	; index. Otherwise use initialValue as reduction target and start at array's
-	; first index.
-	Loop, % (arrLen - idxOffset)
->>>>>>> origin/master
 	{
 		adjIndex := A_Index + idxOffset
 		initialValue := callback.Call(initialValue, array[adjIndex], adjIndex, array)
@@ -267,7 +238,6 @@ array_reduceRight(array, callback, initialValue:="__NULL__") {
 
 	arrLen := array.Length()
 
-<<<<<<< HEAD
 	; initialValue not defined
 	if (initialValue == "__NULL__") {
 
@@ -277,18 +247,9 @@ array_reduceRight(array, callback, initialValue:="__NULL__") {
 		}
 		else if (arrLen == 1) {
 			; Single item array with no initial value
-=======
-	; No initialValue passed
-	if (initialValue == "IAMNULL") {
-
-		if (arrLen < 1)
-			throw "Empty array with no intial value, derp"
-		else if (arrLen == 1)
->>>>>>> origin/master
 			return array[1]
 		}
 
-<<<<<<< HEAD
 		; Starting value is last element
 		initialValue := array[arrLen]
 
@@ -296,15 +257,6 @@ array_reduceRight(array, callback, initialValue:="__NULL__") {
 		iterations := arrLen - 1 
 		
 		; Set index A_Index-1 each iteration
-=======
-		; Start at end
-		initialValue := array[arrLen]
-
-		; Loop n-1 times (start at n-1 element)
-		iterations := arrLen - 1 
-		
-		; Start at n-1 element (Keep 1 based index notation)
->>>>>>> origin/master
 		idxOffset := 0
 
 	} else {
@@ -317,7 +269,6 @@ array_reduceRight(array, callback, initialValue:="__NULL__") {
 		; Loop n times (start at n element)
 		iterations := arrLen
 
-<<<<<<< HEAD
 		; Set index A_Index each iteration
 		idxOffset := 1
 	}
@@ -325,12 +276,6 @@ array_reduceRight(array, callback, initialValue:="__NULL__") {
 	; If no initialValue is passed, use last index as starting value and reduce
 	; array starting at index n-1. Otherwise, use initialValue as starting value
 	; and start at arrays last index.
-=======
-		; Start at n element (Adjust to 0 based index notation)
-		idxOffset := 1
-	}
-
->>>>>>> origin/master
 	Loop, % iterations
 	{
 		adjIndex := arrLen - (A_Index - idxOffset)
@@ -414,13 +359,8 @@ array_some(array, callback) {
 ; https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
 array_sort(array, compare_fn:=0) {
 
-<<<<<<< HEAD
     ; Quicksort
 	Array_QuickSort.Call(array, compare_fn)
-=======
-	;Quicksort
-	throw "Not implemented"
->>>>>>> origin/master
 
     return array
 }
