@@ -17,12 +17,12 @@ class _Array {
         results := []
 
         ; First add the values from the instance being called on
-        for i,v in this
-            results.push(v)
+        for index, value in this
+            results.push(value)
 
         ; Second, add arrays given in parameter
-        for _, array in arrays
-            for _, element in array
+        for index, array in arrays
+            for index, element in array
                 results.push(element)
 
         return results
@@ -442,9 +442,9 @@ class _Array {
     }
 
     ; Simple swap
-    swap(idx1, idx2) {
-        tmp := this[idx1]
-        this[idx1] := this[idx2]
-        this[idx2] := tmp
+    swap(index1, index2) {
+        tmp := this[index1]
+        this[index1] := this[index2]
+        this[index2] := tmp
     }
 }

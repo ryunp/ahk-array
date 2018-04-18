@@ -3,8 +3,8 @@ array_concat(arrays*) {
 
 	results := []
 
-	for _, array in arrays
-		for _, element in array
+	for index, array in arrays
+		for index, element in array
 			results.push(element)
 
 	return results

@@ -28,13 +28,13 @@ Despite AutoHotKey (1.1.28 at the moment) supporting Arrays and Function Objects
 * unshift
 
 ### Installation
-There are two options for using importing these functions, either as global functions stored in **array_.ahk** or by extending the built-in Array object stored in **array_base.ahk**. The sorting function in both files depends on the object defined in **array_quicksort.ahk**. This object must be present for sorting to work properly.
+There are two options for using these functions, either as global functions stored in **array_.ahk** or by extending the built-in Array object with the object stored in **array_base.ahk**. The sorting function in both files depend on the object defined in **array_quicksort.ahk**. This object must be present for sorting to work properly.
 
-Some dislike extending built-in objects. For that reason **array_base.ahk**'s base object does not automatically extend Array. Extending Array, or a custom collections object, is left to the implementer (See _**Extend Array Object**_  below).
+Some dislike extending built-in objects. For that reason **array_base.ahk**'s object does not automatically extend Array. Extending Array, or a custom collections object, is left to the implementer (See _**As Array Object Extension**_  below).
 
 ### Usage
 _**As Global Functions**_  
-**array_.ahk** contains each ported function as a global function declaration in the form of *array_<func>*. The input array is always located in the first parameter position.
+**array_.ahk** contains each ported function as a global function declaration in the form of *array_\<func\>*. The input array is always located in the first parameter position.
 
 Usage: `array_<fn>(array[, params*])`
 ```autohotkey
@@ -57,9 +57,9 @@ get_name(obj) {
 ```
 
 _**As Array Object Extension**_  
-**array_base.ahk** contains each ported function as a method of a single object.
+**array_base.ahk** contains each ported function as a method of the object *_Array*. The most intuitive use case is extending the built-in Array object (assigning it's base object). Some environments avoid modifying built-ins and prefer using custom collection objects.
 
-Usage: `Array.<fn>([params*])`
+Usage: `Array.<fn>([params*])` (Assuming Array's base object was extended)
 ```autohotkey
 #include array_base.ahk
 
@@ -88,8 +88,8 @@ get_name(obj) {
 _**Sorting**_  
 **array_quicksort.ahk** contains the sorting logic. The quicksort behavior is wrapped in a callable function object to avoid cluttering the global namespace.
 
-Indirect Usage: `array_sort(array, [params*])` or `array.sort([params*])`  
-Direct Usage: `Array_Quicksort.Call(array, [params*])`
+Indirect Usage: `array_sort(Array, [params*])` or `Array.sort([params*])`  
+Direct Usage: `Array_Quicksort.Call(Array, [params*])`
 ```autohotkey
 arrayInt := [11,9,5,10,1,6,3,4,7,8,2]
 
