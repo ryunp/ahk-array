@@ -1,7 +1,7 @@
 # array_
 ## Conversion of JavaScript's Array methods to AutoHotkey
 
-Despite AutoHotKey (1.1.28 at the moment) supporting Arrays and Function Objects, there are no handy built-in methods for parsing Array data. This project ports most of JavaScript's Array object methods over to AutoHotKey.
+AutoHotKey is an extremely versatile prototype-based language but lacks built-in iteration helper methods (as of 1.1.28) to perform many of the common behaviors found in other languages. This project ports most of JavaScript's Array object methods over to AutoHotKey.
 
 ### Ported Methods
 * concat
@@ -30,7 +30,7 @@ Despite AutoHotKey (1.1.28 at the moment) supporting Arrays and Function Objects
 ### Installation
 There are two options for using these functions, either as global functions stored in **array_.ahk** or by extending the built-in Array object with the object stored in **array_base.ahk**. The sorting function in both files depend on the object defined in **array_quicksort.ahk**. This object must be present for sorting to work properly.
 
-Some dislike extending built-in objects. For that reason **array_base.ahk**'s object does not automatically extend Array. Extending Array, or a custom collections object, is left to the implementer (See _**As Array Object Extension**_  below).
+Some dislike extending built-in objects. For that reason **array_base.ahk**'s object does not automatically extend Array. Extending Array, or a custom collections object, is left to the implementer (See _**As Array Object Extension**_  below). Using this method based approach grants the ability to perform method-chaining syntax.
 
 ### Usage
 _**As Global Functions**_  
@@ -44,20 +44,22 @@ arrayInt := [1, 5, 10]
 arrayObj := [{"name": "bob", "age": 22}, {"name": "tom", "age": 51}]
 
 ; Map to doubled value
-array_map(arrayInt, func("double")) ; Output: [2, 10, 20]
+array_map(arrayInt, func("double_int")) ; Output: [2, 10, 20]
+
 double_int(int) {
     return int * 2
 }
 
 ; Map to object property
 array_map(arrayObj, func("get_name")) ; Output: ["bob", "tom"]
+
 get_name(obj) {
     return obj.name
 }
 ```
 
 _**As Array Object Extension**_  
-**array_base.ahk** contains each ported function as a method of the object *_Array*. The most intuitive use case is extending the built-in Array object (assigning it's base object). Some environments avoid modifying built-ins and prefer using custom collection objects.
+**array_base.ahk** contains each ported function as a method of the object *_Array*. The most intuitive use case is extending the built-in Array object (assigning it's base object). Some environments avoid modifying built-ins and prefer using custom collection objects. This allows the familar method chaining many have become accustomed to in other languages.
 
 Usage: `Array.<fn>([params*])` (Assuming Array's base object was extended)
 ```autohotkey
@@ -73,15 +75,26 @@ arrayInt := [1, 5, 10]
 arrayObj := [{"name": "bob", "age": 22}, {"name": "tom", "age": 51}]
 
 ; Map to doubled value
-arrayInt.map(func("double")) ; Output: [2, 10, 20]
+arrayInt.map(func("double_int")) ; Output: [2, 10, 20]
+
 double_int(int) {
     return int * 2
 }
 
 ; Map to object property
 arrayObj.map(func("get_name")) ; Output: ["bob", "tom"]
+
 get_name(obj) {
     return obj.name
+}
+
+; Method chaining
+arrayObj.map(func("get_prop").bind("age"))
+    .map(func("double_int"))
+    .join(",")
+
+get_prop(prop, obj) {
+    return obj[prop]
 }
 ```
 
@@ -93,10 +106,11 @@ Direct Usage: `Array_Quicksort.Call(Array, [params*])`
 ```autohotkey
 arrayInt := [11,9,5,10,1,6,3,4,7,8,2]
 
+; Indirect usage
 array_sort(arrayInt) ; Output: [1,2,3,4,5,6,7,8,9,10,11]
 arrayInt.sort()      ; Output: [1,2,3,4,5,6,7,8,9,10,11]
 
-; Each library function facades to the same invocation below
+; Direct usage - each library function facades to the same invocation below
 Array_Quicksort.Call(arrayInt)
 ```
 
